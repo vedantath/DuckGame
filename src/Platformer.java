@@ -156,13 +156,26 @@ Paddle right = new Paddle(2);
         g.setColor(Color.white);
         g.drawString("Eggs Left: "+c.getEggsLeft(), 50, 50);
 
-        for(Thing t : things) {
+        //System.out.println("duck: "+duck.getX()+"\t"+"ball: "+bball.getX());
+        /*if(duck.getX() <= bball.getX()+bball.getWidth() && duck.getX()>= bball.getX())
+        {
+            System.out.println("HIT2");
+        }*/
+
+        /*for(Thing t : things) {
             for (Thing o : things) {
                 if (t != o)
                     if (t.collide(o))
                         t.reset();
             }
-            t.draw(g, this);
+            t.draw(g, this);*/
+        for(Thing t : things)
+        {
+            for(Thing o : things)
+                if(t!=o)
+                    if(t.collide(o))
+                        t.reset();
+            t.draw(g,this);
         }
     }
 

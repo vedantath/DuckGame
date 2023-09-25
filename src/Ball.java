@@ -106,4 +106,6 @@ public class Ball extends Thing
     public double getY() {return y;}
     public double getX() {return x;}
     public String getDirection() {return direction;}
+    public int getWidth() {return w;}
+    public int getHeight() {return h;}
 }

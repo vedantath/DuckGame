@@ -48,17 +48,30 @@ public class Thing {
     {
         return (int)dy;
     }
+    public int getWidth() {return w;}
+    public int getHeight() {return h;}
     public void reset()
     {
     }
 
-   public boolean collide(Thing other)
+   /*public boolean collide(Thing other)
     {
-        if (x < other.x+other.w &&
-                y < other.y+other.h &&
-                x+w > other.x &&
-                y+h > other.y)
+        if(this.x < other.x+other.w &&
+                this.y < other.y+other.h &&
+                this.x+this.w > other.x &&
+                this.y+this.h >other.y)
+            return true;
+        return false;
+    }*/
+    public boolean collide(Thing other)
+    {
+        if(this.getX() < other.getX()+other.getWidth()-5 &&
+                this.getY() < other.getY()+other.getHeight()-5 &&
+                this.getX()+this.getWidth()-5 > other.getX() &&
+                this.getY()+this.getHeight()-5 >other.getY())
             return true;
         return false;
     }
+
+
 }

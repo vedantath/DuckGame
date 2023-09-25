@@ -39,7 +39,7 @@ public class Controller {
     public boolean empty() {return e.isEmpty();}
     public Egg getLast() {return e.getLast();}
     public int getEggsLeft() {
-        System.out.println(ammo.size());
+        //System.out.println(ammo.size());
         if(!ammo.empty()){
             return 20-ammo.size();
         }

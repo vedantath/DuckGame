@@ -33,6 +33,8 @@ public class Egg extends Thing{
     public double getX(){return x;}
     public double getY(){return y;}
     public String getD(){return d;}
+    public int getWidth() {return w;}
+    public int getHeight() {return h;}
 }
 
 

@@ -76,5 +76,7 @@ public class Bball extends Thing
         x=0-w/2;
         y=720-h;
     }
+    public int getWidth() {return w;}
+    public int getHeight() {return h;}
 
 }
