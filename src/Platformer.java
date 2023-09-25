@@ -117,6 +117,7 @@ Paddle right = new Paddle(2);
     {
 
     }
+
     private void tick(){
         c.tick();
     }
@@ -169,6 +170,14 @@ Paddle right = new Paddle(2);
                         t.reset();
             }
             t.draw(g, this);*/
+        for(Egg e: c.e) {
+            if(e.collide(bball)) {
+                bball.reset();
+                c.removeEgg(e);
+            }
+
+        }
+
         for(Thing t : things)
         {
             for(Thing o : things)

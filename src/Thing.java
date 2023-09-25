@@ -65,10 +65,10 @@ public class Thing {
     }*/
     public boolean collide(Thing other)
     {
-        if(this.getX() < other.getX()+other.getWidth()-5 &&
-                this.getY() < other.getY()+other.getHeight()-5 &&
-                this.getX()+this.getWidth()-5 > other.getX() &&
-                this.getY()+this.getHeight()-5 >other.getY())
+        if(this.getX() < other.getX()+other.getWidth()-50 &&
+                this.getY() < other.getY()+other.getHeight()-50 &&
+                this.getX()+this.getWidth()-50 > other.getX() &&
+                this.getY()+this.getHeight()-50 >other.getY())
             return true;
         return false;
     }

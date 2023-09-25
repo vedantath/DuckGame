@@ -4,7 +4,7 @@ import java.util.Stack;
 
 public class Controller {
 
-    private LinkedList<Egg> e = new LinkedList<Egg>();
+    LinkedList<Egg> e = new LinkedList<Egg>();
     private Stack<Egg> ammo = new Stack<Egg>();
     Egg temp;
     GameEngine ge;

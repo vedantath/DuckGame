@@ -23,8 +23,8 @@ public class Egg extends Thing{
     }
 
     public void tick(){
-        if(d.equals("left")) {x-=15;}
-        if(d.equals("right")) {x+=15;}
+        if(d.equals("left")) {x-=20;}
+        if(d.equals("right")) {x+=20;}
     }
     public void render(Graphics g){
         g.setColor(color);
