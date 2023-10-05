@@ -47,4 +47,9 @@ public class Controller {
             return 20;
         return 0;
     }
+    public void resetAmmo()
+    {
+        while(ammo.size()>0)
+            ammo.pop();
+    }
 }

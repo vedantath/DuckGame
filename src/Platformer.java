@@ -1,10 +1,7 @@
-import groovyjarjarantlr4.v4.runtime.misc.NotNull;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.*;
 
 import static com.sun.java.accessibility.util.AWTEventMonitor.addKeyListener;
 
@@ -17,16 +14,16 @@ public class Platformer {
 }
 class GameEngine implements Runnable {
 
-    /*Ball ball = new Ball();
-Paddle left = new Paddle(1);
-Paddle right = new Paddle(2);
-*/
     long onStart = System.currentTimeMillis();
     Bball bball = new Bball();
     Ball duck = new Ball();
-    //Egg egg = new Egg();
+
+    Heart h1 = new Heart(20);
+    Heart h2 = new Heart(70);
+    Heart h3 = new Heart(120);
+    ArrayList<Heart> hearts = new ArrayList<>();
+
     Thing[] things = {duck,bball};
-    //ArrayList<Egg> eggs = new ArrayList<Egg>();
 
     public static void main(String[] args) {
         GameEngine ge = new GameEngine();
@@ -40,11 +37,13 @@ Paddle right = new Paddle(2);
     private Input input;
     private boolean running = false;
     private final double UPDATE_CAP = 1.0/60;
+    private Canvas canvas;
 
     private Controller c;
+
     public GameEngine()
     {
-        //addKeyListener(new KeyInput(this));
+
     }
     public void start()
     {
@@ -53,6 +52,14 @@ Paddle right = new Paddle(2);
         input = new Input(this);
         addKeyListener(new KeyInput(this));
         c= new Controller(this);
+
+        canvas = new Canvas();
+        canvas.setPreferredSize(new Dimension(width,height));
+        canvas.setFocusable(false);
+        canvas.addMouseListener(input);
+        canvas.addMouseMotionListener(input);
+        hearts.add(h1); hearts.add(h2); hearts.add(h3);
+
         thread.run();
     }
     public void stop()
@@ -70,7 +77,7 @@ Paddle right = new Paddle(2);
         double frameTime = 0;
         int frames = 0;
         int fps= 0;
-        //addKeyListener(new KeyInput(this));
+
         while(running)
         {
             firstTime = System.nanoTime()/1000000000.0;
@@ -90,7 +97,7 @@ Paddle right = new Paddle(2);
                     frameTime=0;
                     fps=frames;
                     frames=0;
-                    //System.out.println("FPS : "+fps);
+                    System.out.println("FPS : "+fps);
                 }
                 //update Game
             }
@@ -115,7 +122,7 @@ Paddle right = new Paddle(2);
     }
     private void dispose()
     {
-
+        System.exit(0);
     }
 
     private void tick(){
@@ -140,52 +147,113 @@ Paddle right = new Paddle(2);
 
     }
 
-    public void update(Graphics g) throws InterruptedException
+    public void update(Graphics g) throws InterruptedException {
+
+        if (duck.getLives() > 0) {
+
+            for(int i = 0; i<duck.getLives(); i++)
+            {
+                hearts.get(i).draw(g);
+            }
+
+            long time = System.currentTimeMillis() - onStart;
+            if (this.getInput().isKeyDown(KeyEvent.VK_SPACE) && time >= 200) {
+                KeyEvent e = new KeyEvent(new JButton(), 0, 0, 0, KeyEvent.VK_SPACE, '\0');
+                KeyInput testobj = new KeyInput(this);
+                onStart = System.currentTimeMillis();
+                testobj.keyPressed(e);
+            }
+            c.render(g);
+            c.tick();
+
+            g.setColor(Color.white);
+            g.drawString("Eggs Left: " + c.getEggsLeft(), 50, 50);
+
+            for (Egg e : c.e) {
+                if (e.collide(bball)) {
+                    bball.reset();
+                    c.removeEgg(e);
+                }
+
+            }
+
+            for (Thing t : things) {
+                for (Thing o : things)
+                    if (t != o)
+                        if (t.collide(o)) {
+                            t.reset();
+                            duck.removeLife();
+                        }
+                t.draw(g, this);
+            }
+        }
+        else {  //Game over screen & menu
+            g.setColor(Color.red);
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 60));
+            g.drawString("Game Over", width/2-120, height/2);
+
+            Rectangle resBtn = new Rectangle(150,100,100,25);
+            Rectangle exitBtn = new Rectangle(150,150,100,25);
+
+            g.setFont(new Font("Arial", Font.BOLD, 26));
+            g.setColor(Color.WHITE);
+            g.drawString("Duck Lite",125,75);
+            if(!mouseHover(resBtn))
+                g.setColor(Color.CYAN);
+            else
+                g.setColor(Color.PINK);
+            g.fillRect(resBtn.x, resBtn.y, resBtn.width, resBtn.height);
+            g.setFont(new Font("Arial", Font.BOLD, 12));
+            g.setColor(Color.GRAY);
+            g.drawString("Reset", resBtn.x+20, resBtn.y+17);
+            if(!mouseHover(exitBtn))
+                g.setColor(Color.CYAN);
+            else
+                g.setColor(Color.PINK);
+            g.fillRect(exitBtn.x, exitBtn.y, exitBtn.width, exitBtn.height);
+            g.setColor(Color.GRAY);
+            g.drawString("Exit", exitBtn.x+20, exitBtn.y+17);
+
+            if(btnClicked(exitBtn))
+            {
+                System.out.println("EXIT");
+                dispose();
+                input.clearMouseClick();
+            }
+
+            if(btnClicked(resBtn))
+            {
+                System.out.println("RES");
+                onStart = System.currentTimeMillis();
+                duck.setLives(3);
+                c.resetAmmo();
+                input.clearMouseClick();
+            }
+
+        }
+    }
+
+    private boolean btnClicked(Rectangle btn) {
+
+        if(mouseHover(btn))
+        {
+            if(input.isMouseClicked()) {
+                input.clearMouseClick();
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean mouseHover(Rectangle btn)
     {
-        long time = System.currentTimeMillis()-onStart;
-
-        if (this.getInput().isKeyDown(KeyEvent.VK_SPACE) && time>=200)
+        if(input.getMouseX()>= btn.x && input.getMouseX()<= btn.x+btn.width &&
+                input.getMouseY() >= btn.y && input.getMouseY()<=btn.y+btn.height)
         {
-            KeyEvent e = new KeyEvent(new JButton(), 0, 0, 0, KeyEvent.VK_SPACE, '\0');
-            KeyInput testobj = new KeyInput(this);
-            onStart = System.currentTimeMillis();
-            testobj.keyPressed(e);
+            return true;
         }
-        c.render(g);
-        c.tick();
-       // duck.draw(g, this);
-        g.setColor(Color.white);
-        g.drawString("Eggs Left: "+c.getEggsLeft(), 50, 50);
-
-        //System.out.println("duck: "+duck.getX()+"\t"+"ball: "+bball.getX());
-        /*if(duck.getX() <= bball.getX()+bball.getWidth() && duck.getX()>= bball.getX())
-        {
-            System.out.println("HIT2");
-        }*/
-
-        /*for(Thing t : things) {
-            for (Thing o : things) {
-                if (t != o)
-                    if (t.collide(o))
-                        t.reset();
-            }
-            t.draw(g, this);*/
-        for(Egg e: c.e) {
-            if(e.collide(bball)) {
-                bball.reset();
-                c.removeEgg(e);
-            }
-
-        }
-
-        for(Thing t : things)
-        {
-            for(Thing o : things)
-                if(t!=o)
-                    if(t.collide(o))
-                        t.reset();
-            t.draw(g,this);
-        }
+        return false;
     }
 
 }

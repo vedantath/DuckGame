@@ -54,21 +54,12 @@ public class Thing {
     {
     }
 
-   /*public boolean collide(Thing other)
-    {
-        if(this.x < other.x+other.w &&
-                this.y < other.y+other.h &&
-                this.x+this.w > other.x &&
-                this.y+this.h >other.y)
-            return true;
-        return false;
-    }*/
     public boolean collide(Thing other)
     {
-        if(this.getX() < other.getX()+other.getWidth()-50 &&
-                this.getY() < other.getY()+other.getHeight()-50 &&
-                this.getX()+this.getWidth()-50 > other.getX() &&
-                this.getY()+this.getHeight()-50 >other.getY())
+        if(this.getX() < other.getX()+other.getWidth()-30 &&
+                this.getY() < other.getY()+other.getHeight()-30 &&
+                this.getX()+this.getWidth()-30 > other.getX() &&
+                this.getY()+this.getHeight()-30 >other.getY())
             return true;
         return false;
     }

@@ -22,6 +22,7 @@ public class Window
 
         frame = new JFrame(ge.getTitle());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         frame.add(canvas,BorderLayout.CENTER);
         frame.pack();

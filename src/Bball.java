@@ -16,7 +16,6 @@ public class Bball extends Thing
     {
         try
         {
-            //bball = ImageIO.read(getClass().getResource("bball.png"));
             bball = ImageIO.read(getClass().getResource("bball.png"));
         }
         catch(Exception e){}
@@ -30,7 +29,6 @@ public class Bball extends Thing
         g.setColor(color);
         g.drawImage(bball,(int)x, (int)y, w , h, null);
 
-
         move();
         if (ge.getInput().isKeyDown(KeyEvent.VK_R))
             reset();
@@ -40,10 +38,7 @@ public class Bball extends Thing
         x += dx;
         if(y>720-h||y<0+h)
             dy=-INITIAL_VELOCITY;
-        /*if (x <-50)
-        {
-            reset();
-        }*/
+
         if (x > 1010)
         {
             reset();

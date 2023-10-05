@@ -1,3 +1,6 @@
+//import javax.swing.text.Position;
+//import kotlin.reflect.jvm.internal.impl.incremental.components.Position;
+
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
@@ -10,6 +13,13 @@ import static com.sun.java.accessibility.util.AWTEventMonitor.addKeyListener;
 
 class Input implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener
 {
+    //private Position pointerPosition;
+    private boolean mouseClicked;
+    private boolean mousePressed;
+
+    private boolean[] currentlyPressed;
+    private boolean[] pressed;
+
     private boolean[] keys = new boolean[256];
     private boolean[] keysLast = new boolean[256];
 
@@ -30,7 +40,25 @@ class Input implements KeyListener, MouseListener, MouseMotionListener, MouseWhe
         ge.getWindow().getCanvas().addMouseListener(this);
         ge.getWindow().getCanvas().addMouseMotionListener(this);
         ge.getWindow().getCanvas().addMouseWheelListener(this);
+
+        pressed = new boolean[1000];
+        currentlyPressed = new boolean[1000];
+        //pointerPosition = new Position(0,0);
     }
+
+    public void clearMouseClick()
+    {
+        mouseClicked = false;
+    }
+
+    public boolean isMouseClicked() {
+        return mouseClicked;
+    }
+
+    public boolean isMousePressed() {
+        return mousePressed;
+    }
+
     public boolean isKey(int keyCode)
     {
         return keys[keyCode];
@@ -88,10 +116,15 @@ class Input implements KeyListener, MouseListener, MouseMotionListener, MouseWhe
     }
     public void mousePressed(MouseEvent e)
     {
+        mousePressed = true;
+
         buttons[e.getButton()] = true;
     }
     public void mouseReleased(MouseEvent e)
     {
+        mouseClicked = true;
+        mousePressed = false;
+
         buttons[e.getButton()] = false;
     }
     public void mouseClicked(MouseEvent e)

@@ -8,26 +8,23 @@ import javax.imageio.*;
 
 public class Ball extends Thing
 {
-    boolean running = false;
+    //boolean running = false;
     int INITIAL_VELOCITY = 25;
-    //final int TERMINAL_VELOCITY = 10;
     final int GRAVITY = 1;
     Image ball;
     private String direction;
-    //int INITIAL_GRAV=0;
     Color color = Color.yellow;
     double x=360;
     double y=300;
-   // int w=50;
-    //int h = 50;
+    int lives = 3;
 
     public Ball()
     {
-        /*try
+        try
         {
-            ball = ImageIO.read(getClass().getResource("hand.png"));
+            ball = ImageIO.read(getClass().getResource("suck.png"));
         }
-        catch(Exception e){ }*/
+        catch(Exception e){}
 
         reset();
         direction="";
@@ -35,11 +32,9 @@ public class Ball extends Thing
     }
     public void draw(Graphics g, GameEngine ge) throws InterruptedException
     {
-        //g.setColor(color);
-        //g.drawImage(ball,(int)x, (int)y, w , h, null);
         g.setColor(color);
-        //System.out.println("w: "+w+" h: "+h);  (100,100)
-        g.fillRect((int)x,(int)y,80,80);
+        g.drawImage(ball,(int)x, (int)y, w , h, null);
+
         move();
         gravity(ge);
         if (ge.getInput().isKeyDown(KeyEvent.VK_R))
@@ -56,11 +51,20 @@ public class Ball extends Thing
             if(x>0){
                 x-=10;
                 direction="left";
+                //To make the duck face opposite direction
+                /*if(w/1>0) {
+                    w = -w;
+                    this.x += Math.abs(w);
+                }*/
             }
         if (ge.getInput().isKeyDown(KeyEvent.VK_D))
-            if(x<910){
+            if(x<960-w){
                 x+=10;
                 direction="right";
+                if(w/1<0) {
+                    w = -w;
+                    this.x -= Math.abs(w);
+                }
             }
         if (INITIAL_VELOCITY <= -25)
         {
@@ -94,10 +98,6 @@ public class Ball extends Thing
                 y = 720-h;
         }
     }
-    /*public void jump(float x)
-    {
-        y -= 670 - (INITIAL_VELOCITY*x)+((GRAVITY/2)*(Math.pow(x, 2)));
-    }*/
 
     public void jump() throws InterruptedException
     {
@@ -108,4 +108,10 @@ public class Ball extends Thing
     public String getDirection() {return direction;}
     public int getWidth() {return w;}
     public int getHeight() {return h;}
+    public int getLives() {return lives;}
+    public void setLives(int x) {lives = x;}
+    public void removeLife() {
+        lives -= 1;
+    }
+
 }
