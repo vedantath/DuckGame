@@ -16,6 +16,7 @@ public class Ball extends Thing
     Color color = Color.yellow;
     double x=360;
     double y=300;
+    //double y=150;
     int lives = 3;
 
     public Ball()
@@ -39,13 +40,15 @@ public class Ball extends Thing
         gravity(ge);
         if (ge.getInput().isKeyDown(KeyEvent.VK_R))
             reset();
-        if (ge.getInput().isKeyDown(KeyEvent.VK_W)&& y <= 720-h)
+        if (ge.getInput().isKeyDown(KeyEvent.VK_W)&& y <= 650-h)
         {
+            if(y==650-h)
+                Sound.JUMP.play();
             // Will result in the player moving upwards.
             y -= INITIAL_VELOCITY; // Move the player on the y-axis based on the strength of the jump.
             INITIAL_VELOCITY -= GRAVITY; // Gradually decrease the strength of the jump by the player's weight.
-            if (y > 720-h)
-                y = 720-h;
+            if (y > 650-h)
+                y = 650-h;
         }
         if (ge.getInput().isKeyDown(KeyEvent.VK_A))
             if(x>0){
@@ -69,7 +72,7 @@ public class Ball extends Thing
         if (INITIAL_VELOCITY <= -25)
         {
             INITIAL_VELOCITY = 25;
-            y = 720-h;
+            y = 650-h;
         }
     }
     public void move()
@@ -85,17 +88,17 @@ public class Ball extends Thing
         dx=dy=0;
         w=h=100;
         x=960/2-w/2;
-        y=720-h;
+        y=650-h;
 
     }
     public void gravity(GameEngine ge)
     {
-        if(ge.getInput().isKeyDown(KeyEvent.VK_W)==false && y < 720-h)
+        if(ge.getInput().isKeyDown(KeyEvent.VK_W)==false && y < 650-h)
         {
             y-=INITIAL_VELOCITY;
             INITIAL_VELOCITY-=GRAVITY;
-            if(y > 720-h)
-                y = 720-h;
+            if(y > 650-h)
+                y = 650-h;
         }
     }
 

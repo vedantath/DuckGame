@@ -36,25 +36,25 @@ public class Bball extends Thing
     public void move()
     {
         x += dx;
-        if(y>720-h||y<0+h)
+        if(y>650-h||y<0+h)
             dy=-INITIAL_VELOCITY;
 
         if (x > 1010)
         {
             reset();
         }
-        if (y <= 720-h)
+        if (y <= 650-h)
         {
             // Will result in the player moving upwards.
             y -= INITIAL_VELOCITY; // Move the player on the y-axis based on the strength of the jump.
             INITIAL_VELOCITY -= GRAVITY; // Gradually decrease the strength of the jump by the player's weight.
-            if (y > 720-h)
-                y = 720-h;
+            if (y > 650-h)
+                y = 650-h;
         }
         if (INITIAL_VELOCITY <= -25)
         {
             INITIAL_VELOCITY = 25;
-            y = 720-h;
+            y = 650-h;
         }
     }
     public void bounce()
@@ -69,7 +69,7 @@ public class Bball extends Thing
 
         w=h=150;
         x=0-w/2;
-        y=720-h;
+        y=650-h;
     }
     public int getWidth() {return w;}
     public int getHeight() {return h;}
