@@ -17,6 +17,8 @@ public class Platformer {
 class GameEngine implements Runnable {
 
     long onStart = System.currentTimeMillis();
+    long onCreate = System.currentTimeMillis();
+    double liveTime;
     Bball bball = new Bball();
     Ball duck = new Ball();
 
@@ -26,7 +28,6 @@ class GameEngine implements Runnable {
     ArrayList<Heart> hearts = new ArrayList<>();
 
     Thing[] things = {duck,bball};
-    Background bg = new Background();
 
     public static void main(String[] args) {
         GameEngine ge = new GameEngine();
@@ -41,9 +42,10 @@ class GameEngine implements Runnable {
     private boolean running = false;
     private final double UPDATE_CAP = 1.0/60;
     private Canvas canvas;
-    private int gameStart = 0;
 
     private Controller c;
+
+    int sound = 0;
 
     public GameEngine()
     {
@@ -63,7 +65,6 @@ class GameEngine implements Runnable {
         canvas.addMouseListener(input);
         canvas.addMouseMotionListener(input);
         hearts.add(h1); hearts.add(h2); hearts.add(h3);
-        gameStart = 1;
         thread.run();
     }
     public void stop()
@@ -145,7 +146,8 @@ class GameEngine implements Runnable {
         if(key == KeyEvent.VK_SPACE) {
             if (duck.getDirection().equals("left")) { c.addEgg(new Egg(duck.getX(), duck.getY(), this, "right"));}
             if (duck.getDirection().equals("right")) { c.addEgg(new Egg(duck.getX(), duck.getY(), this, "left"));}
-            Sound.SHOOT.play();
+            if(!c.empty())
+                Sound.SHOOT.play();
 
         }
     }
@@ -155,27 +157,19 @@ class GameEngine implements Runnable {
 
     public void update(Graphics g) throws InterruptedException {
 
-        //System.out.println("GS: "+gameStart);
-        /*if(gameStart == 1)
-        {
-            bg.draw(g);
-            //g.setColor(Color.GREEN);
-            //g.drawImage(bg,(int)x, (int)y, w , h, null);
-            //g.drawRect(0,0,960,720);
-            System.out.println("BGG");
-            gameStart = 2;
-        }*/
+
         if (duck.getLives() > 0) {
+            liveTime = (double)((System.currentTimeMillis()-onCreate)/1000.0);
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 16));
+            g.setColor(Color.BLACK);
+            g.drawString("Time: " +liveTime+" seconds", 650, 50);
 
-
-            bg.draw(g);
             for(int i = 0; i<duck.getLives(); i++)
             {
                 hearts.get(i).draw(g);
             }
-            //bg.draw(g);
-
             long time = System.currentTimeMillis() - onStart;
+            sound = 1;
             if (this.getInput().isKeyDown(KeyEvent.VK_SPACE) && time >= 200) {
                 KeyEvent e = new KeyEvent(new JButton(), 0, 0, 0, KeyEvent.VK_SPACE, '\0');
                 KeyInput testobj = new KeyInput(this);
@@ -185,7 +179,8 @@ class GameEngine implements Runnable {
             c.render(g);
             c.tick();
 
-            g.setColor(Color.white);
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 16));
+            g.setColor(Color.BLACK);
             g.drawString("Eggs Left: " + c.getEggsLeft(), 50, 50);
 
             for (Egg e : c.e) {
@@ -207,16 +202,25 @@ class GameEngine implements Runnable {
             }
         }
         else {  //Game over screen & menu
+            if(sound==1) {
+                Sound.DIE.play();
+                sound = 0;
+            }
             g.setColor(Color.red);
             g.setFont(new Font("TimesRoman", Font.PLAIN, 60));
-            g.drawString("Game Over", width/2-120, height/2);
+            g.drawString("Game Over", width/2-150, height/2);
 
-            Rectangle resBtn = new Rectangle(150,100,100,25);
-            Rectangle exitBtn = new Rectangle(150,150,100,25);
+            Rectangle resBtn = new Rectangle(150,100+100,100,25);
+            Rectangle exitBtn = new Rectangle(150,150+100,100,25);
+
+            g.setFont(new Font("Arial", Font.BOLD, 26));
+            g.setColor(Color.BLACK);
+
+            g.drawString("Time lasted: "+liveTime+" seconds",150,75);
 
             g.setFont(new Font("Arial", Font.BOLD, 26));
             g.setColor(Color.WHITE);
-            g.drawString("Duck Lite",125,75);
+            g.drawString("Duck Lite",150,75+100);
             if(!mouseHover(resBtn))
                 g.setColor(Color.CYAN);
             else
@@ -244,6 +248,7 @@ class GameEngine implements Runnable {
             {
                 System.out.println("RES");
                 onStart = System.currentTimeMillis();
+                onCreate = System.currentTimeMillis();
                 duck.setLives(3);
                 c.resetAmmo();
                 input.clearMouseClick();

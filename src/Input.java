@@ -13,7 +13,6 @@ import static com.sun.java.accessibility.util.AWTEventMonitor.addKeyListener;
 
 class Input implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener
 {
-    //private Position pointerPosition;
     private boolean mouseClicked;
     private boolean mousePressed;
 

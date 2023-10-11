@@ -16,7 +16,8 @@ public class Bball extends Thing
     {
         try
         {
-            bball = ImageIO.read(getClass().getResource("bball.png"));
+            //bball = ImageIO.read(getClass().getResource("bball.png"));
+            bball = ImageIO.read(getClass().getResource("pumpkin.png"));
         }
         catch(Exception e){}
 

@@ -12,11 +12,11 @@ public class Ball extends Thing
     int INITIAL_VELOCITY = 25;
     final int GRAVITY = 1;
     Image ball;
+    Image ball2;
     private String direction;
     Color color = Color.yellow;
     double x=360;
     double y=300;
-    //double y=150;
     int lives = 3;
 
     public Ball()
@@ -24,6 +24,7 @@ public class Ball extends Thing
         try
         {
             ball = ImageIO.read(getClass().getResource("suck.png"));
+            ball2 = ImageIO.read(getClass().getResource("duck2.png"));
         }
         catch(Exception e){}
 
@@ -33,8 +34,15 @@ public class Ball extends Thing
     }
     public void draw(Graphics g, GameEngine ge) throws InterruptedException
     {
-        g.setColor(color);
-        g.drawImage(ball,(int)x, (int)y, w , h, null);
+        if(direction.equals("") || direction.equals("right")) {
+            g.setColor(color);
+            g.drawImage(ball, (int) x, (int) y, w, h, null);
+        }
+        if(direction.equals("left")) {
+            g.setColor(color);
+            g.drawImage(ball2, (int) x, (int) y, w, h, null);
+        }
+
 
         move();
         gravity(ge);
@@ -54,11 +62,6 @@ public class Ball extends Thing
             if(x>0){
                 x-=10;
                 direction="left";
-                //To make the duck face opposite direction
-                /*if(w/1>0) {
-                    w = -w;
-                    this.x += Math.abs(w);
-                }*/
             }
         if (ge.getInput().isKeyDown(KeyEvent.VK_D))
             if(x<960-w){

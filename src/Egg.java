@@ -10,7 +10,7 @@ public class Egg extends Thing{
 
     public Egg(double x, double y, GameEngine ge, String direction) {
         this.x = x;
-        this.y = y;
+        this.y = y+35;
         w = 32*2;
         h = 22*2;
         color = Color.white;

@@ -1,7 +1,7 @@
 import java.awt.*;
 
 public class Thing {
-    //private static Object y;
+
     double x,y,dx,dy;
     int w,h;
     Color color;
@@ -14,12 +14,8 @@ public class Thing {
 
     public Thing()
     {
-        //color = new Color((int)(Math.random()*256),(int)(Math.random()*256),(int)(Math.random()*256));
-    }
-    /*public void draw(Graphics g, GameEngine ge)
-    {
 
-    }*/
+    }
     public void draw(Graphics g, GameEngine ge) throws InterruptedException
     {
 

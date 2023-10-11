@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import javax.imageio.*;
+import java.io.IOException;
 
 public class Window
 {
@@ -11,6 +13,7 @@ public class Window
     private Graphics g;
     private BufferStrategy bs;
     private GameEngine game;
+    private Image bg;
 
     public Window(GameEngine ge)
     {
@@ -37,13 +40,18 @@ public class Window
         g = bs.getDrawGraphics();
        // g2 = bs.getDrawGraphics();
 
+        try
+        {
+            bg = ImageIO.read(getClass().getResource("background.jpg"));
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
 
     }
     public void update() throws InterruptedException {
-        g.drawImage(image,0,0,canvas.getWidth(),canvas.getHeight(),null);
-        //g.drawImage(image,0,0,canvas.getWidth(),canvas.getHeight(),null);
-       // g2.setColor(Color.white);
-       // g2.fillRect(155+3,0,3,240);
+        g.drawImage(bg,0,0,canvas.getWidth(),canvas.getHeight(),null);
         game.update(g);
         bs.show();
     }

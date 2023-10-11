@@ -6,6 +6,7 @@ public class Controller {
 
     LinkedList<Egg> e = new LinkedList<Egg>();
     private Stack<Egg> ammo = new Stack<Egg>();
+    private int eggLimit = 30;
     Egg temp;
     GameEngine ge;
 
@@ -30,21 +31,20 @@ public class Controller {
     }
 
     public void addEgg(Egg o){
-        if(ammo.size()<20) {
+        if(ammo.size()<eggLimit) {
             e.add(o);
             ammo.push(o);
         }
     }
     public void removeEgg(Egg o) {e.remove(o);}
     public boolean empty() {return e.isEmpty();}
-    public Egg getLast() {return e.getLast();}
+    //public Egg getLast() {return e.getLast();}
     public int getEggsLeft() {
-        //System.out.println(ammo.size());
         if(!ammo.empty()){
-            return 20-ammo.size();
+            return eggLimit-ammo.size();
         }
         else if(ammo.size()==0)
-            return 20;
+            return eggLimit;
         return 0;
     }
     public void resetAmmo()
